@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Revenda Tech</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://*.supabase.co; img-src 'self' data: blob: https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#f4f5f7; --bar:rgba(244,245,247,.86); --surface:#ffffff; --surface2:#f7f8fa;
+  --border:#e5e7eb; --border-strong:#d3d8e0;
+  --text:#0f172a; --text2:#475569; --muted:#8492a6;
+  --primary:#2457e6; --primary-soft:#e9effd; --on-primary:#ffffff;
+  --ok:#15803d; --ok-soft:#e6f5ec; --warn:#b45309; --warn-soft:#fdf1da; --bad:#b91c1c; --bad-soft:#fdeaea;
+  --shadow:0 1px 2px rgba(15,23,42,.05);
+  --radius:14px; --sab:env(safe-area-inset-bottom,0px);
+}
+:root[data-theme=dark]{
+  --bg:#0a0e16; --bar:rgba(10,14,22,.86); --surface:#111826; --surface2:#0d1420;
+  --border:#1d2a3d; --border-strong:#2a3a54;
+  --text:#e8edf5; --text2:#a7b4c8; --muted:#73839b;
+  --primary:#5b8cff; --primary-soft:#15233f; --on-primary:#0a0e16;
+  --ok:#4ade80; --ok-soft:#10281a; --warn:#fbbf24; --warn-soft:#2e2310; --bad:#f87171; --bad-soft:#2f1517;
+  --shadow:none;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums;padding-bottom:calc(88px + var(--sab))}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,p{margin:0}
+.ic{flex:none;display:block}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* Barre du haut */
+.topbar{position:sticky;top:0;z-index:30;background:var(--bar);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--border)}
+.topbar .wrap{height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#7c9bff);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
+.brand-t{min-width:0}
+.brand-t b{display:block;font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-t span{font-size:12px;color:var(--muted)}
+.seg{display:inline-flex;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px;gap:2px}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text2);white-space:nowrap}
+.page-h{flex-wrap:wrap}
+.page-h>div:first-child{flex:1 1 100%;min-width:0}
+.page-h .seg{width:100%}
+.page-h .seg button{flex:1;padding:7px 4px}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(15,23,42,.14)}
+:root[data-theme=dark] .seg button.on{background:var(--border-strong)}
+
+main{padding-top:18px}
+.page-h{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:14px}
+.page-h h1{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.page-h .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.sec-h{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 8px}
+.sec-h h2{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text2)}
+.link{border:0;background:none;color:var(--primary);font-size:13px;font-weight:600;padding:4px 2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.pad{padding:14px 16px}
+.stack>*+*{margin-top:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+
+/* Hero + KPI */
+.hero{padding:18px;background:linear-gradient(160deg,var(--surface),var(--surface2))}
+.lbl{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.02em}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hero-val{font-size:32px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px;line-height:1.15}
+.hero-sub{font-size:13px;color:var(--muted)}
+.kpi{padding:14px}
+.kpi .v{font-size:19px;font-weight:700;margin-top:4px;letter-spacing:-.01em;word-break:break-word}
+.kpi .s{font-size:12px;color:var(--muted);margin-top:2px}
+.stat{padding:12px}
+.stat .v{font-size:16px;font-weight:700;margin-top:2px}
+.okc{color:var(--ok)}.badc{color:var(--bad)}.warnc{color:var(--warn)}.mutedc{color:var(--muted)}
+
+/* Pastilles */
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:600;line-height:1.5;background:var(--surface2);color:var(--text2);border:1px solid var(--border);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.pill.pri{background:var(--primary-soft);color:var(--primary);border-color:transparent}
+.grade{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;font-size:11px;font-weight:700}
+.grade.A{background:var(--ok-soft);color:var(--ok)}
+.grade.B{background:var(--primary-soft);color:var(--primary)}
+.grade.C{background:var(--warn-soft);color:var(--warn)}
+.grade.D{background:var(--bad-soft);color:var(--bad)}
+
+/* Listes */
+.list{overflow:hidden}
+.rw{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:none;text-align:left;border-bottom:1px solid var(--border)}
+.rw:last-child{border-bottom:0}
+.rw:active{background:var(--surface2)}
+.ph-strip{display:flex;gap:8px;overflow-x:auto;margin:0 0 14px;scrollbar-width:none}
+.ph-strip::-webkit-scrollbar{display:none}
+.ph-strip button{flex:none;width:92px;height:92px;border-radius:12px;border:1px solid var(--border);background:var(--surface2) center/cover no-repeat;padding:0}
+.ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ph-cell{position:relative;aspect-ratio:1;border-radius:12px;border:1px solid var(--border);background:var(--surface2) center/cover no-repeat;overflow:hidden}
+.ph-cell .rm{position:absolute;right:4px;top:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(15,23,42,.72);color:#fff;display:grid;place-items:center;padding:0}
+.ph-add{aspect-ratio:1;border-radius:12px;border:1.5px dashed var(--border2);background:none;color:var(--primary);display:grid;place-items:center;font-size:12px;font-weight:600;gap:2px;padding:0;cursor:pointer}
+.ph-add span{display:grid;justify-items:center;gap:2px}
+.tile.has-img{background-size:cover;background-position:center;background-repeat:no-repeat;color:transparent}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface2);margin-bottom:12px}
+.sw b{display:block;font-size:14px}.sw small{color:var(--muted);font-size:12px}
+.sw input{width:22px;height:22px;accent-color:var(--primary);flex:none}
+.lb{position:fixed;inset:0;z-index:90;background:rgba(2,6,23,.92);display:flex;align-items:center;justify-content:center}
+.lb img{max-width:100%;max-height:100%;object-fit:contain}
+.lb .xbtn{position:absolute;right:14px;top:14px;background:rgba(255,255,255,.16);color:#fff}
+.tile{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--primary-soft);color:var(--primary)}
+.tile.big{width:48px;height:48px;border-radius:13px}
+.tile.sm{width:32px;height:32px;border-radius:9px}
+.tile.warnt{background:var(--warn-soft);color:var(--warn)}
+.tile.badt{background:var(--bad-soft);color:var(--bad)}
+.tile.okt{background:var(--ok-soft);color:var(--ok)}
+.rw-main{flex:1;min-width:0}
+.rw-t{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rw-s{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:3px;flex-wrap:wrap}
+.rw-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-size:12px;flex:none}
+.rw-r b{font-size:15px;color:var(--text)}
+.chev{color:var(--muted)}
+.bar{height:6px;border-radius:99px;background:var(--surface2);border:1px solid var(--border);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--primary);border-radius:99px}
+
+/* Recherche / filtres */
+.search{position:relative;margin-bottom:10px}
+.search .ic{position:absolute;left:12px;top:12px;color:var(--muted)}
+.in{width:100%;height:44px;padding:0 12px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;outline:none;appearance:none;-webkit-appearance:none}
+.in:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.search .in{padding-left:38px}
+select.in{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 19px,calc(100% - 13px) 19px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px}
+textarea.in{height:auto;padding:10px 12px;resize:none}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.chip.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.toolbar .in{height:38px;font-size:14px;width:auto;min-width:150px}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border-radius:11px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-weight:600;font-size:15px}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.btn.danger{color:var(--bad);border-color:var(--border-strong)}
+.btn.sm{height:34px;padding:0 12px;font-size:13px;border-radius:9px}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.55;pointer-events:none}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.btns .full{grid-column:1/-1}
+.fab{position:fixed;right:max(16px,calc(50% - 364px));bottom:calc(78px + var(--sab));width:54px;height:54px;border-radius:17px;border:0;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;box-shadow:0 8px 22px rgba(36,87,230,.35);z-index:25}
+
+/* Navigation */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bar);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-top:1px solid var(--border);padding-bottom:var(--sab)}
+nav .wrap{display:grid;grid-template-columns:repeat(5,1fr);padding:0 6px}
+nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:11px;font-weight:600;color:var(--muted);position:relative}
+nav button.on{color:var(--primary)}
+nav button.on::before{content:"";position:absolute;top:0;width:26px;height:3px;border-radius:0 0 4px 4px;background:var(--primary)}
+
+/* Formulaires */
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.inwrap{position:relative}
+.inwrap .in{padding-right:52px}
+.inwrap .cur{position:absolute;right:12px;top:0;height:44px;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.est{display:flex;justify-content:space-between;align-items:center;border-radius:11px;padding:10px 12px;background:var(--surface2);border:1px dashed var(--border-strong);font-size:13px;margin-bottom:12px}
+.gbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gbtn{height:44px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);font-weight:700}
+.gbtn.on{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);color:var(--primary)}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* Feuille (modale) */
+.backdrop{position:fixed;inset:0;background:rgba(2,6,23,.5);z-index:60;display:flex;align-items:flex-end;justify-content:center;animation:fade .18s}
+.sheet{background:var(--surface);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:8px 18px calc(18px + var(--sab));animation:up .24s cubic-bezier(.2,.8,.2,1)}
+.sh-bar{position:relative;display:flex;justify-content:center;align-items:center;height:34px;margin-bottom:8px}
+.grab{width:40px;height:4px;border-radius:9px;background:var(--border-strong)}
+.xbtn{position:absolute;right:-4px;top:0;width:34px;height:34px;border-radius:50%;border:0;background:var(--surface2);color:var(--text2);display:grid;place-items:center}
+.sh-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sh-head h3{font-size:18px;font-weight:700;line-height:1.25}
+.sh-title{font-size:18px;font-weight:700;margin-bottom:12px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.kv>div{background:var(--surface);padding:10px 12px}
+.kv small{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kv b{display:block;font-size:15px;margin-top:2px;word-break:break-word}
+.note{margin-top:12px;padding:10px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);font-size:13px;color:var(--text2)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+
+/* Toast */
+#toast{position:fixed;left:50%;bottom:calc(96px + var(--sab));transform:translate(-50%,10px);background:#0f172a;color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:.22s;pointer-events:none;z-index:90;display:flex;gap:8px;align-items:center;max-width:90vw;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Etats vides / chargement */
+.empty{text-align:center;padding:34px 18px}
+.empty .tile{margin:0 auto 12px;width:52px;height:52px;border-radius:15px}
+.empty b{display:block;font-size:15px}
+.empty p{font-size:13px;color:var(--muted);margin-top:4px}
+.sk{border-radius:var(--radius);background:linear-gradient(90deg,var(--surface) 0%,var(--surface2) 50%,var(--surface) 100%);background-size:200% 100%;animation:sh 1.2s infinite;border:1px solid var(--border);margin-bottom:10px}
+@keyframes sh{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* Graphique */
+.chart{display:block;width:100%;height:auto}
+.chart .gl{stroke:var(--border);stroke-dasharray:2 4}
+.chart .b1{fill:var(--primary);opacity:.22}
+.chart .b2{fill:var(--primary)}
+.chart .b3{fill:var(--bad)}
+.chart .lb{fill:var(--muted);font-size:9px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--text2);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* Facture (toujours sur fond clair pour l'impression) */
+.inv{background:#fff;color:#0f172a;border-radius:12px;padding:20px;font-size:13px;line-height:1.5;border:1px solid #e2e8f0}
+.inv .top{display:flex;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:2px solid #0f172a}
+.inv .brand-n{font-size:16px;font-weight:700}
+.inv .sm{color:#475569;font-size:12px}
+.inv .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;color:#fff;background:#0f172a;border-radius:6px;padding:3px 9px}
+.inv .no{font-size:18px;font-weight:700;margin-top:6px;white-space:nowrap}
+.inv .top>div:last-child{flex:none}
+.inv .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.inv .meta small{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;color:#64748b;text-transform:uppercase;margin-bottom:3px}
+.inv table{width:100%;border-collapse:collapse;table-layout:fixed}
+.inv th:nth-child(2){width:44px}
+.inv th:nth-child(3){width:38%}
+.inv td{overflow-wrap:anywhere}
+.inv th{text-align:left;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;border-bottom:1px solid #cbd5e1;padding:7px 4px}
+.inv td{padding:10px 4px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+.inv .r{text-align:right;white-space:nowrap}
+.inv .totals{margin:14px 0 0 auto;width:62%;background:#f1f5f9;border-radius:10px;padding:10px 12px}
+.inv .totals .tl{display:flex;justify-content:space-between;font-size:16px;font-weight:700}
+.inv .stamp{display:inline-block;margin-top:6px;border:1.5px solid #15803d;color:#15803d;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:700;letter-spacing:.1em}
+.inv .ft{margin-top:16px;padding-top:10px;border-top:1px solid #e2e8f0;color:#64748b;font-size:11.5px}
+@media print{
+  @page{margin:12mm}
+  body{background:#fff;padding:0}
+  body *{visibility:hidden}
+  #inv,#inv *{visibility:visible}
+  #inv{position:absolute;left:0;top:0;width:100%;border:0;border-radius:0}
+  .backdrop{background:none}
+}
+@media (min-width:700px){.backdrop{align-items:center}.sheet{border-radius:22px;max-height:88vh}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <div class="brand"><div class="mark" id="mark">R</div><div class="brand-t"><b id="biz">Revenda Tech</b><span id="pg"></span></div></div>
+  <div class="seg" id="langseg"><button data-a="lang" data-id="fr">FR</button><button data-a="lang" data-id="pt">PT</button></div>
+</div></header>
+<main class="wrap" id="main"></main>
+<button class="fab" id="fab" data-a="add" aria-label="+"></button>
+<nav><div class="wrap" id="nav"></div></nav>
+<div id="toast"></div>
+<div id="modal"></div>
+
+<script>
+const tg = window.Telegram && Telegram.WebApp;
+try { if (tg) { tg.ready(); tg.expand(); } } catch(e){}
+const $ = id => document.getElementById(id);
+
+/* ============ Traductions ============ */
+const I18N = {
+fr: {
+  app:"Revenda Tech", nDash:"Accueil", nStock:"Stock", nSales:"Ventes", nInv:"Factures", nSet:"Réglages",
+  tDash:"Tableau de bord", tStock:"Stock", tSales:"Ventes", tInv:"Factures", tSet:"Réglages",
+  hello:"Bonjour", p7:"7 j", p30:"30 j", p90:"90 j", pAll:"Tout",
+  netProfit:"Bénéfice net", revenue:"Chiffre d'affaires", avgMargin:"Marge moyenne", stockValue:"Valeur du stock",
+  potential:"Bénéfice potentiel", ifAllSold:"si tout est vendu", vsPrev:"vs période préc.",
+  sale1:"vente", saleN:"ventes", inv1:"facture", invN:"factures", item1:"article", itemN:"articles",
+  chartTitle:"Évolution", legRev:"Chiffre d'affaires", legProfit:"Bénéfice", noData:"Pas encore de ventes sur cette période",
+  watch:"À surveiller", dormant:"Stock dormant", belowCost:"Prix inférieur au coût", allGood:"Rien à signaler. Bon travail !",
+  inStockFor:"En stock depuis", seeStock:"Voir le stock", byType:"Stock par catégorie", recentSales:"Dernières ventes", seeAll:"Tout voir",
+  phone:"Téléphone", laptop:"Ordinateur portable", desktop:"Unité centrale", screen:"Écran", accessory:"Accessoire", other:"Autre",
+  search:"Rechercher un article, un IMEI…", all:"Tous", available:"Disponible", reserved:"Réservé", sold:"Vendu", status:"Statut",
+  sortRecent:"Plus récents", sortOld:"Plus anciens", sortPrice:"Prix décroissant", sortMargin:"Meilleure marge",
+  capital:"Capital immobilisé", noStock:"Aucun article", noStockHint:"Ajoute ton premier article avec le bouton +.", noResult:"Aucun résultat",
+  noResultHint:"Essaie un autre mot-clé ou retire un filtre.", daysShort:"j", addItem:"Ajouter un article", editItem:"Modifier l'article",
+  fType:"Catégorie", fName:"Désignation", fNamePh:"Ex. iPhone 12 128 Go", fCond:"État", fSerial:"IMEI / N° de série",
+  fCost:"Prix d'achat", fRepair:"Remise en état", fPrice:"Prix de vente affiché", fNotes:"Notes internes", est:"Marge estimée",
+  save:"Enregistrer", cancel:"Annuler", close:"Fermer", required:"Désignation et prix d'achat obligatoires", saved:"Enregistré",
+  gA:"Comme neuf", gB:"Bon état", gC:"Traces d'usage", gD:"Pour pièces", grade:"Grade",
+  details:"Détails", totalCost:"Coût total", margin:"Marge", sell:"Vendre", reserve:"Réserver", unreserve:"Libérer",
+  adCopy:"Copier l'annonce", adCopied:"Annonce copiée", edit:"Modifier", del:"Supprimer", delAsk:"Supprimer cet article ?",
+  delBlocked:"Article facturé : suppression impossible.",
+  adTitle:"📣 À VENDRE · Occasion / reconditionné", adState:"État", adSerial:"N° de série", adPrice:"Prix", adContact:"Contactez-moi pour plus d'infos !",
+  sellTitle:"Enregistrer la vente", soldPrice:"Prix de vente réel", buyer:"Acheteur (nom / tél.)", date:"Date", confirmSell:"Confirmer la vente", saleProfit:"Bénéfice de la vente",
+  noSales:"Aucune vente", noSalesHint:"Les ventes de la période apparaîtront ici.", invoiced:"Facturée", toInvoice:"À facturer", soldOn:"Vendu le",
+  cancelSale:"Annuler la vente", cancelSaleAsk:"Remettre cet article en stock ?", exportCsv:"Exporter CSV", csvCopied:"CSV copié : colle-le dans Excel ou Sheets",
+  hasInvoice:"Article facturé : la vente ne peut plus être annulée.", buyerLbl:"Client",
+  invSearch:"Client, n° de facture, article…", invCount:"Factures émises", invTotalAmt:"Montant facturé", noInv:"Aucune facture",
+  noInvHint:"Crée une facture depuis une vente.", toBill:"À facturer", createInvoice:"Créer la facture", viewInvoice:"Voir la facture", paid:"PAYÉE",
+  invoice:"FACTURE", invNo:"N°", invDesc:"Désignation", invQty:"Qté", invUnit:"Prix unitaire", invTotal:"Total", invPaid:"Paiement", invWarranty:"Garantie",
+  invBuyer:"Facturé à", invFrom:"Émetteur", days:"jours", invGrade:"État", invSerial:"IMEI / Série",
+  invFooterDefault:"Document commercial sans valeur fiscale. Merci de votre confiance !",
+  invFormTitle:"Nouvelle facture", buyerName:"Nom du client", buyerPhone:"Téléphone du client", buyerDoc:"Pièce d'identité / CPF (optionnel)",
+  payment:"Mode de paiement", pay_cash:"Espèces", pay_pix:"Pix", pay_transfer:"Virement", pay_mobile_money:"Mobile Money", pay_card:"Carte", pay_other:"Autre",
+  warranty:"Garantie (jours)", invNote:"Mention sur la facture (optionnel)", creating:"Création…", print:"Imprimer / PDF", copyInv:"Copier le texte",
+  invCopied:"Facture copiée", printHint:"Sur téléphone : capture d'écran ou copie du texte. Sur ordinateur : Imprimer / PDF.",
+  askInvoice:"Vente enregistrée. Créer la facture maintenant ?", needBiz:"Renseigne d'abord ton entreprise dans Réglages.",
+  account:"Compte", connected:"Connecté via Telegram", adminRole:"Accès autorisé", company:"Entreprise",
+  bizName:"Nom de l'entreprise", bizAddress:"Adresse", bizPhone:"Téléphone", bizTax:"N° fiscal (NIF / CNPJ)", bizFooter:"Mention de bas de facture", bizSaved:"Entreprise enregistrée",
+  prefs:"Préférences", language:"Langue", currency:"Devise", data:"Données", exportJson:"Copier la sauvegarde (JSON)", exportStock:"Stock en CSV",
+  backupCopied:"Sauvegarde copiée", security:"Sécurité",
+  photos:"Photos", addPhoto:"Ajouter", photoMax:"4 photos maximum, compressées automatiquement.", photoErr:"Photo refusée", photoUp:"Envoi des photos…", photoDel:"Supprimer cette photo ?", photoFail:"Certaines photos n'ont pas pu être envoyées",
+  pub:"Afficher dans ma vitrine publique", pubHint:"Visible par tout le monde : photo, nom, état, prix. Jamais le coût ni les notes.", pubOn:"En vitrine", vitrine:"Vitrine publique", vitrineText:"Une page web publique avec tes articles en stock cochés « vitrine ». Partage le lien sur WhatsApp, Facebook ou Instagram.", copyLink:"Copier le lien", linkCopied:"Lien copié", vitrineWarn:"Les photos et les articles cochés sont publics. Ne photographie pas de numéro de série ni de données personnelles.",
+  secText:"Chaque requête est signée par Telegram et vérifiée côté serveur. Seuls les comptes autorisés accèdent à tes données.", version:"Version",
+  loadingTxt:"Chargement…", retry:"Réessayer", errTg:"Ouvre cette application depuis Telegram, via ton bot.",
+  errDenied:"Accès refusé. Ton compte Telegram n'est pas autorisé.", errNet:"Erreur réseau ou serveur. Réessaie."
+},
+pt: {
+  app:"Revenda Tech", nDash:"Início", nStock:"Estoque", nSales:"Vendas", nInv:"Faturas", nSet:"Ajustes",
+  tDash:"Painel", tStock:"Estoque", tSales:"Vendas", tInv:"Faturas", tSet:"Ajustes",
+  hello:"Olá", p7:"7 d", p30:"30 d", p90:"90 d", pAll:"Tudo",
+  netProfit:"Lucro líquido", revenue:"Faturamento", avgMargin:"Margem média", stockValue:"Valor do estoque",
+  potential:"Lucro potencial", ifAllSold:"se tudo for vendido", vsPrev:"vs período ant.",
+  sale1:"venda", saleN:"vendas", inv1:"fatura", invN:"faturas", item1:"item", itemN:"itens",
+  chartTitle:"Evolução", legRev:"Faturamento", legProfit:"Lucro", noData:"Ainda sem vendas neste período",
+  watch:"Atenção", dormant:"Estoque parado", belowCost:"Preço abaixo do custo", allGood:"Nada a reportar. Bom trabalho!",
+  inStockFor:"Em estoque há", seeStock:"Ver estoque", byType:"Estoque por categoria", recentSales:"Últimas vendas", seeAll:"Ver tudo",
+  phone:"Celular", laptop:"Notebook", desktop:"Computador (CPU)", screen:"Monitor", accessory:"Acessório", other:"Outro",
+  search:"Buscar item, IMEI…", all:"Todos", available:"Disponível", reserved:"Reservado", sold:"Vendido", status:"Status",
+  sortRecent:"Mais recentes", sortOld:"Mais antigos", sortPrice:"Maior preço", sortMargin:"Melhor margem",
+  capital:"Capital imobilizado", noStock:"Nenhum item", noStockHint:"Adicione seu primeiro item com o botão +.", noResult:"Nenhum resultado",
+  noResultHint:"Tente outra palavra ou remova um filtro.", daysShort:"d", addItem:"Adicionar item", editItem:"Editar item",
+  fType:"Categoria", fName:"Descrição", fNamePh:"Ex. iPhone 12 128 GB", fCond:"Estado", fSerial:"IMEI / N° de série",
+  fCost:"Preço de compra", fRepair:"Reparo", fPrice:"Preço de venda", fNotes:"Notas internas", est:"Margem estimada",
+  save:"Salvar", cancel:"Cancelar", close:"Fechar", required:"Descrição e preço de compra obrigatórios", saved:"Salvo",
+  gA:"Como novo", gB:"Bom estado", gC:"Marcas de uso", gD:"Para peças", grade:"Grau",
+  details:"Detalhes", totalCost:"Custo total", margin:"Margem", sell:"Vender", reserve:"Reservar", unreserve:"Liberar",
+  adCopy:"Copiar anúncio", adCopied:"Anúncio copiado", edit:"Editar", del:"Excluir", delAsk:"Excluir este item?",
+  delBlocked:"Item faturado: exclusão impossível.",
+  adTitle:"📣 À VENDA · Usado / recondicionado", adState:"Estado", adSerial:"N° de série", adPrice:"Preço", adContact:"Fale comigo para mais informações!",
+  sellTitle:"Registrar a venda", soldPrice:"Preço de venda real", buyer:"Comprador (nome / tel.)", date:"Data", confirmSell:"Confirmar venda", saleProfit:"Lucro da venda",
+  noSales:"Nenhuma venda", noSalesHint:"As vendas do período aparecerão aqui.", invoiced:"Faturada", toInvoice:"A faturar", soldOn:"Vendido em",
+  cancelSale:"Cancelar a venda", cancelSaleAsk:"Devolver este item ao estoque?", exportCsv:"Exportar CSV", csvCopied:"CSV copiado: cole no Excel ou Sheets",
+  hasInvoice:"Item faturado: a venda não pode mais ser cancelada.", buyerLbl:"Cliente",
+  invSearch:"Cliente, n° da fatura, item…", invCount:"Faturas emitidas", invTotalAmt:"Valor faturado", noInv:"Nenhuma fatura",
+  noInvHint:"Crie uma fatura a partir de uma venda.", toBill:"A faturar", createInvoice:"Criar a fatura", viewInvoice:"Ver a fatura", paid:"PAGA",
+  invoice:"FATURA", invNo:"N°", invDesc:"Descrição", invQty:"Qtd", invUnit:"Preço unitário", invTotal:"Total", invPaid:"Pagamento", invWarranty:"Garantia",
+  invBuyer:"Faturado a", invFrom:"Emitente", days:"dias", invGrade:"Estado", invSerial:"IMEI / Série",
+  invFooterDefault:"Documento comercial sem valor fiscal. Obrigado pela preferência!",
+  invFormTitle:"Nova fatura", buyerName:"Nome do cliente", buyerPhone:"Telefone do cliente", buyerDoc:"Documento / CPF (opcional)",
+  payment:"Forma de pagamento", pay_cash:"Dinheiro", pay_pix:"Pix", pay_transfer:"Transferência", pay_mobile_money:"Mobile Money", pay_card:"Cartão", pay_other:"Outro",
+  warranty:"Garantia (dias)", invNote:"Mensagem na fatura (opcional)", creating:"Criando…", print:"Imprimir / PDF", copyInv:"Copiar o texto",
+  invCopied:"Fatura copiada", printHint:"No celular: print da tela ou copie o texto. No computador: Imprimir / PDF.",
+  askInvoice:"Venda registrada. Criar a fatura agora?", needBiz:"Preencha primeiro sua empresa em Ajustes.",
+  account:"Conta", connected:"Conectado via Telegram", adminRole:"Acesso autorizado", company:"Empresa",
+  bizName:"Nome da empresa", bizAddress:"Endereço", bizPhone:"Telefone", bizTax:"N° fiscal (NIF / CNPJ)", bizFooter:"Mensagem no rodapé da fatura", bizSaved:"Empresa salva",
+  prefs:"Preferências", language:"Idioma", currency:"Moeda", data:"Dados", exportJson:"Copiar backup (JSON)", exportStock:"Estoque em CSV",
+  backupCopied:"Backup copiado", security:"Segurança",
+  photos:"Fotos", addPhoto:"Adicionar", photoMax:"Máximo 4 fotos, comprimidas automaticamente.", photoErr:"Foto recusada", photoUp:"Enviando fotos…", photoDel:"Excluir esta foto?", photoFail:"Algumas fotos não puderam ser enviadas",
+  pub:"Mostrar na minha vitrine pública", pubHint:"Visível para todos: foto, nome, estado, preço. Nunca o custo nem as notas.", pubOn:"Na vitrine", vitrine:"Vitrine pública", vitrineText:"Uma página web pública com seus itens em estoque marcados como «vitrine». Compartilhe o link no WhatsApp, Facebook ou Instagram.", copyLink:"Copiar link", linkCopied:"Link copiado", vitrineWarn:"As fotos e os itens marcados são públicos. Não fotografe número de série nem dados pessoais.",
+  secText:"Cada requisição é assinada pelo Telegram e verificada no servidor. Só contas autorizadas acessam seus dados.", version:"Versão",
+  loadingTxt:"Carregando…", retry:"Tentar de novo", errTg:"Abra este aplicativo pelo Telegram, via seu bot.",
+  errDenied:"Acesso negado. Sua conta do Telegram não está autorizada.", errNet:"Erro de rede ou servidor. Tente de novo."
+}
+};
+
+/* ============ Icones (SVG) ============ */
+const IC = {
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/>',
+  box:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+  trend:'<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
+  file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  sliders:'<path d="M4 6h9M19 6h1M4 12h3M13 12h7M4 18h11M21 18h-1"/><circle cx="16" cy="6" r="2.2"/><circle cx="10" cy="12" r="2.2"/><circle cx="18" cy="18" r="2.2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+  chev:'<path d="m9 6 6 6-6 6"/>',
+  phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M11 18h2"/>',
+  laptop:'<rect x="4.5" y="5" width="15" height="11" rx="1.8"/><path d="M2.5 20h19"/>',
+  desktop:'<rect x="5.5" y="3" width="13" height="18" rx="2"/><circle cx="12" cy="15.5" r="1.6"/><path d="M9 7h6"/>',
+  screen:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  accessory:'<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.6"/><rect x="17" y="14" width="4" height="6" rx="1.6"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  printer:'<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+  check:'<path d="m5 12.5 4.5 4.5L19 7"/>',
+  alert:'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+  up:'<path d="M7 17 17 7M8 7h9v9"/>', down:'<path d="M7 7l10 10M17 8v9H8"/>',
+  download:'<path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>',
+  shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  building:'<rect x="5" y="3" width="14" height="18" rx="1.8"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/>',
+  share:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="m8.2 10.8 7.6-3.6M8.2 13.2l7.6 3.6"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',
+  undo:'<path d="M4 12a8 8 0 1 0 3-6.3M4 4v5h5"/>',
+  receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>',
+  camera:'<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.4"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'
+};
+const ico = (n, s) => `<svg class="ic" width="${s||20}" height="${s||20}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const TYPES = ['phone','laptop','desktop','screen','accessory','other'];
+const TYPE_ICO = {phone:'phone', laptop:'laptop', desktop:'desktop', screen:'screen', accessory:'accessory', other:'box'};
+const PAYS = ['cash','pix','transfer','mobile_money','card','other'];
+const CURRENCIES = ['BRL','XOF','XAF','EUR','USD','MZN','AOA','CVE'];
+
+/* ============ Etat ============ */
+/* L'adresse vient de config.js (seul fichier a modifier, voir le guide) */
+const _REF = String((window.REVENDA_CONFIG && window.REVENDA_CONFIG.projectRef) || '');
+const API_URL = 'https://' + (/^[a-z0-9]{10,30}$/.test(_REF) ? _REF : 'VOTRE-REF-PROJET') + '.supabase.co/functions/v1/api';
+
+const PREF = 'revenda_prefs_v2';   // seulement langue et devise (rien de sensible)
+let S = loadPrefs();
+S.invoices = []; S.profile = { businessName:'', address:'', phone:'', taxId:'', footer:'' };
+const ST = { view:'dash', dash:'30', sales:'30', inv:'all', stockFilter:'all', typeFilter:'all', sort:'recent', q:'', iq:'', loading:true, err:'' };
+const TU = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+
+function loadPrefs(){
+  try { const d = JSON.parse(localStorage.getItem(PREF)); if (d && d.lang) return { items: [], lang: d.lang, currency: d.currency || 'BRL' }; } catch(e){}
+  const tl = String((tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || navigator.language || 'fr').toLowerCase();
+  return { items: [], lang: tl.startsWith('pt') ? 'pt' : 'fr', currency: tl.startsWith('pt') ? 'BRL' : 'XOF' };
+}
+function save(){ try { localStorage.setItem(PREF, JSON.stringify({ lang: S.lang, currency: S.currency })); } catch(e){} }
+
+/* ============ API securisee (signature Telegram a chaque requete) ============ */
+async function api(action, payload){
+  const initData = tg && tg.initData;
+  if (!initData) throw new Error('NO_TG');
+  let r;
+  try {
+    r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Telegram-Init-Data': initData }, body: JSON.stringify(Object.assign({ action }, payload || {})) });
+  } catch(e) { throw new Error('NET'); }
+  if (r.status === 401 || r.status === 403) throw new Error('DENIED');
+  if (!r.ok) {
+    let code = 'NET';
+    try { const j = await r.json(); if (j && /^bad_/.test(j.error || '')) code = j.error; } catch(e) {}
+    throw new Error(code);
+  }
+  return r.json();
+}
+async function refresh(){
+  try {
+    const [d, p, v] = await Promise.all([api('list'), api('profile_get'), api('invoice_list')]);
+    S.items = d.items || []; S.profile = p.profile || S.profile;
+    if (S.profile.currency && CURRENCIES.includes(S.profile.currency)) { S.currency = S.profile.currency; save(); } S.invoices = v.invoices || []; ST.err = '';
+  } catch(e) { ST.err = e.message; }
+  ST.loading = false; render();
+}
+async function sync(action, payload){
+  try { await api(action, payload); }
+  catch(e) { toast(t('errNet')); await refresh(); }
+}
+
+/* ============ Utilitaires ============ */
+const t = k => (I18N[S.lang] && I18N[S.lang][k]) || k;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; };
+const sum = (l, f) => l.reduce((a, x) => a + f(x), 0);
+const loc = lang => (lang || S.lang) === 'pt' ? 'pt-BR' : 'fr-FR';
+function fmtMoney(v, cur, lang){
+  try { return new Intl.NumberFormat(loc(lang), {style:'currency', currency:cur, maximumFractionDigits:2}).format(v || 0); }
+  catch(e){ return (v || 0).toFixed(2) + ' ' + cur; }
+}
+const money = v => fmtMoney(v, S.currency, S.lang);
+const ymd = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const today = () => ymd(new Date());
+const daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return ymd(d); };
+const fmtDate = (d, lang) => { try { return new Date(d + 'T00:00:00').toLocaleDateString(loc(lang)); } catch(e){ return d || ''; } };
+const shortDate = d => String(d).slice(8, 10) + '/' + String(d).slice(5, 7);
+const daysIn = i => Math.max(0, Math.floor((Date.now() - (i.created || Date.now())) / 86400000));
+const totalCost = i => num(i.cost) + num(i.repair);
+const plural = (n, k) => n + ' ' + t((S.lang === 'pt' ? n !== 1 : n > 1) ? k + 'N' : k + '1');
+const gradeLabel = g => t('g' + (g || 'B'));
+const gradeBadge = g => `<span class="grade ${esc(g || 'B')}" title="${esc(gradeLabel(g))}">${esc(g || 'B')}</span>`;
+const pill = (txt, kind) => `<span class="pill ${kind || ''}">${txt}</span>`;
+const invMap = () => { const m = {}; S.invoices.forEach(v => { if (v.itemId) m[v.itemId] = v; }); return m; };
+const invNo = n => String(n).padStart(6, '0');
+const periodLabel = p => p === 'all' ? t('pAll') : t('p' + p);
+
+function toast(msg){
+  const el = $('toast'); el.innerHTML = ico('check', 16) + '<span>' + esc(msg) + '</span>'; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+function ask(msg, cb){ if (tg && tg.showConfirm) tg.showConfirm(msg, ok => ok && cb()); else if (confirm(msg)) cb(); }
+function haptic(){ try { tg.HapticFeedback.impactOccurred('light'); } catch(e){} }
+function copy(text, msg){
+  const done = () => toast(msg);
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+  else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch(e){} ta.remove(); }
+
+/* Theme clair / sombre, suit Telegram */
+function applyTheme(){
+  let dark = false;
+  if (tg && tg.colorScheme) dark = tg.colorScheme === 'dark';
+  else if (window.matchMedia) dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  try { tg.setHeaderColor(dark ? '#0a0e16' : '#f4f5f7'); tg.setBackgroundColor(dark ? '#0a0e16' : '#f4f5f7'); } catch(e){}
+}
+applyTheme();
+try { tg.onEvent('themeChanged', applyTheme); } catch(e){}
+
+/* ============ Agregats ============ */
+function aggRange(from, to){
+  const list = S.items.filter(i => i.status === 'sold' && i.soldDate && (!from || i.soldDate >= from) && (!to || i.soldDate <= to));
+  const rev = sum(list, i => num(i.soldPrice)), cost = sum(list, totalCost);
+  return { list, n: list.length, rev, cost, profit: rev - cost };
+}
+const aggPeriod = p => p === 'all' ? aggRange(null, null) : aggRange(daysAgo(Number(p) - 1), today());
+
+function buckets(p){
+  const out = [];
+  if (p === 'all'){
+    const now = new Date();
+    for (let k = 5; k >= 0; k--){
+      const d = new Date(now.getFullYear(), now.getMonth() - k, 1), e = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+      out.push({ from: ymd(d), to: ymd(e), label: d.toLocaleDateString(loc(), { month: 'short' }) });
+    }
+    return out;
+  }
+  const n = Number(p), cnt = n === 7 ? 7 : n === 30 ? 6 : 9, size = n / cnt;
+  for (let k = 0; k < cnt; k++){
+    const startOff = n - 1 - k * size, endOff = startOff - (size - 1);
+    out.push({ from: daysAgo(startOff), to: daysAgo(endOff), label: shortDate(daysAgo(endOff)) });
+  }
+  return out;
+}
+
+function chartSVG(bs, data){
+  const W = 320, H = 132, pad = 4, base = H - 20, top = 8, hh = base - top;
+  const max = Math.max(1, ...data.map(d => d.rev)), bw = (W - pad * 2) / data.length, g = bw * 0.3;
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let k = 0; k <= 2; k++){ const y = top + hh * k / 2; s += `<line class="gl" x1="0" x2="${W}" y1="${y}" y2="${y}"/>`; }
+  data.forEach((d, i) => {
+    const x = pad + i * bw + g / 2, w = bw - g, hr = d.rev > 0 ? Math.max(3, d.rev / max * hh) : 0, hp = d.profit > 0 ? d.profit / max * hh : 0;
+    if (hr) s += `<rect class="b1" x="${x.toFixed(1)}" y="${(base - hr).toFixed(1)}" width="${w.toFixed(1)}" height="${hr.toFixed(1)}" rx="3"/>`;
+    if (hp) s += `<rect class="b2" x="${x.toFixed(1)}" y="${(base - hp).toFixed(1)}" width="${w.toFixed(1)}" height="${hp.toFixed(1)}" rx="3"/>`;
+    else if (d.profit < 0) s += `<rect class="b3" x="${x.toFixed(1)}" y="${base - 3}" width="${w.toFixed(1)}" height="3" rx="1.5"/>`;
+    if (i === 0 || i === data.length - 1 || i === Math.floor(data.length / 2)) s += `<text class="lb" x="${(x + w / 2).toFixed(1)}" y="${H - 5}" text-anchor="middle">${esc(bs[i].label)}</text>`;
+  });
+  return s + '</svg>';
+}
+
+/* ============ Rendu principal ============ */
+const TABS = [['dash','grid','nDash'],['stock','box','nStock'],['sales','trend','nSales'],['inv','file','nInv'],['set','sliders','nSet']];
+function render(){
+  document.documentElement.lang = S.lang;
+  const bn = (S.profile.businessName || '').trim();
+  $('biz').textContent = bn || t('app');
+  $('mark').textContent = (bn || 'R').charAt(0).toUpperCase();
+  const cur = TABS.find(x => x[0] === ST.view);
+  $('pg').textContent = t('t' + cur[0].charAt(0).toUpperCase() + cur[0].slice(1));
+  document.querySelectorAll('#langseg button').forEach(b => b.classList.toggle('on', b.dataset.id === S.lang));
+  $('nav').innerHTML = TABS.map(([k, ic, lb]) => `<button class="${ST.view === k ? 'on' : ''}" data-a="nav" data-id="${k}">${ico(ic, 22)}<span>${t(lb)}</span></button>`).join('');
+  $('fab').innerHTML = ico('plus', 26);
+  const blocked = ST.loading || ST.err;
+  $('fab').style.display = (!blocked && (ST.view === 'dash' || ST.view === 'stock')) ? 'grid' : 'none';
+  const m = $('main');
+  if (ST.loading) { m.innerHTML = '<div class="sk" style="height:140px"></div><div class="grid2"><div class="sk" style="height:84px"></div><div class="sk" style="height:84px"></div></div><div class="sk" style="height:170px"></div>'; return; }
+  if (ST.err) {
+    const txt = ST.err === 'NO_TG' ? t('errTg') : ST.err === 'DENIED' ? t('errDenied') : t('errNet');
+    m.innerHTML = `<div class="card empty" style="margin-top:30px"><div class="tile badt">${ico('alert', 24)}</div><b>${txt}</b>${ST.err === 'NET' ? `<p><button class="btn pri sm" data-a="retry" style="margin-top:10px">${t('retry')}</button></p>` : ''}</div>`;
+    return;
+  }
+  m.innerHTML = ST.view === 'dash' ? vDash() : ST.view === 'stock' ? vStock() : ST.view === 'sales' ? vSales() : ST.view === 'inv' ? vInv() : vSet();
+}
+
+const seg = (scope, current, opts) => `<div class="seg">${opts.map(([v, l]) => `<button class="${current === v ? 'on' : ''}" data-a="per" data-scope="${scope}" data-id="${v}">${l}</button>`).join('')}</div>`;
+const PERIODS = () => [['7', t('p7')], ['30', t('p30')], ['90', t('p90')], ['all', t('pAll')]];
+const emptyState = (icon, title, hint) => `<div class="card empty"><div class="tile">${ico(icon, 24)}</div><b>${title}</b><p>${hint}</p></div>`;
+
+/* ============ Tableau de bord ============ */
+function vDash(){
+  const p = ST.dash, cur = aggPeriod(p);
+  const prev = p === 'all' ? null : aggRange(daysAgo(2 * Number(p) - 1), daysAgo(Number(p)));
+  const delta = prev && prev.profit !== 0 ? (cur.profit - prev.profit) / Math.abs(prev.profit) * 100 : null;
+  const mPct = cur.rev > 0 ? cur.profit / cur.rev * 100 : 0;
+  const inv = S.items.filter(i => i.status !== 'sold');
+  const capital = sum(inv, totalCost), potential = sum(inv, i => num(i.price) - totalCost(i));
+  const bs = buckets(p), data = bs.map(b => { const a = aggRange(b.from, b.to); return { rev: a.rev, profit: a.profit }; });
+  const hasData = data.some(d => d.rev > 0);
+
+  const below = inv.filter(i => num(i.price) > 0 && num(i.price) < totalCost(i));
+  const dormant = inv.filter(i => daysIn(i) > 60 && !below.includes(i)).sort((a, b) => daysIn(b) - daysIn(a));
+  const alerts = below.map(i => ({ i, k: 'below' })).concat(dormant.map(i => ({ i, k: 'dormant' })));
+  const groups = TYPES.map(k => { const l = inv.filter(i => i.type === k); return { k, n: l.length, v: sum(l, totalCost) }; }).filter(g => g.n).sort((a, b) => b.v - a.v);
+  const maxV = Math.max(1, ...groups.map(g => g.v));
+  const recent = aggRange(null, null).list.sort((a, b) => (b.soldDate || '').localeCompare(a.soldDate || '')).slice(0, 4);
+  const m = invMap();
+
+  const dtxt = delta === null ? '' : (Math.abs(delta) > 999 ? '999 %+' : Math.abs(delta).toFixed(0) + ' %');
+  const dpill = delta === null ? '' : pill(ico(delta >= 0 ? 'up' : 'down', 13) + dtxt, delta >= 0 ? 'ok' : 'bad');
+  return `
+  <div class="page-h"><div><h1>${t('hello')}${TU.first_name ? ', ' + esc(TU.first_name) : ''}</h1><div class="sub">${new Date().toLocaleDateString(loc(), { weekday:'long', day:'numeric', month:'long' })}</div></div>${seg('dash', p, PERIODS())}</div>
+
+  <section class="card hero">
+    <div class="hero-top"><span class="lbl">${t('netProfit')} · ${periodLabel(p)}</span>${dpill ? `<span title="${t('vsPrev')}">${dpill}</span>` : ''}</div>
+    <div class="hero-val ${cur.profit < 0 ? 'badc' : ''}">${money(cur.profit)}</div>
+    <div class="hero-sub">${plural(cur.n, 'sale')} · ${t('revenue')} ${money(cur.rev)}</div>
+  </section>
+
+  <div class="grid2" style="margin-top:10px">
+    <div class="card kpi"><span class="lbl">${t('avgMargin')}</span><div class="v">${mPct.toLocaleString(loc(), { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %</div><div class="s">${t('revenue')}: ${money(cur.rev)}</div></div>
+    <div class="card kpi"><span class="lbl">${t('stockValue')}</span><div class="v">${money(capital)}</div><div class="s">${plural(inv.length, 'item')}</div></div>
+  </div>
+  <div class="card kpi" style="margin-top:10px"><span class="lbl">${t('potential')}</span><div class="v ${potential < 0 ? 'badc' : 'okc'}">${money(potential)}</div><div class="s">${t('ifAllSold')}</div></div>
+
+  <div class="sec-h"><h2>${t('chartTitle')}</h2></div>
+  <section class="card pad">
+    ${hasData ? chartSVG(bs, data) + `<div class="legend"><span><i style="background:var(--primary);opacity:.25"></i>${t('legRev')}</span><span><i style="background:var(--primary)"></i>${t('legProfit')}</span></div>` : `<div class="empty" style="padding:22px 0"><p>${t('noData')}</p></div>`}
+  </section>
+
+  <div class="sec-h"><h2>${t('watch')}${alerts.length ? ' · ' + alerts.length : ''}</h2></div>
+  ${alerts.length ? `<section class="card list">${alerts.slice(0, 4).map(a => {
+      const gain = num(a.i.price) - totalCost(a.i), d = daysIn(a.i);
+      return `<button class="rw" data-a="open" data-id="${esc(a.i.id)}"><span class="tile sm ${a.k === 'below' ? 'badt' : 'warnt'}">${ico(a.k === 'below' ? 'alert' : 'clock', 17)}</span><span class="rw-main"><span class="rw-t">${esc(a.i.name)}</span><span class="rw-s">${a.k === 'below' ? t('belowCost') + ' · ' + money(gain) : t('inStockFor') + ' ' + d + ' ' + t('daysShort')}</span></span><span class="chev">${ico('chev', 18)}</span></button>`;
+    }).join('')}</section>` : `<section class="card pad" style="display:flex;gap:10px;align-items:center"><span class="tile sm okt">${ico('check', 17)}</span><span style="font-size:14px">${t('allGood')}</span></section>`}
+
+  ${groups.length ? `<div class="sec-h"><h2>${t('byType')}</h2></div><section class="card pad">${groups.map(g => `
+    <div style="margin-bottom:12px"><div class="rw-s" style="justify-content:space-between;margin:0;color:var(--text)"><span style="display:flex;align-items:center;gap:8px">${ico(TYPE_ICO[g.k], 16)}<b style="font-weight:600">${t(g.k)}</b><span class="mutedc">${g.n}</span></span><b>${money(g.v)}</b></div><div class="bar"><i style="width:${(g.v / maxV * 100).toFixed(0)}%"></i></div></div>`).join('').replace(/margin-bottom:12px(?![\s\S]*margin-bottom:12px)/, 'margin-bottom:0')}</section>` : ''}
+
+  <div class="sec-h"><h2>${t('recentSales')}</h2><button class="link" data-a="nav" data-id="sales">${t('seeAll')}</button></div>
+  ${recent.length ? `<section class="card list">${recent.map(i => rowSale(i, m)).join('')}</section>` : emptyState('trend', t('noSales'), t('noSalesHint'))}`;
+}
+
+/* ============ Stock ============ */
+function stockFiltered(){
+  let l = S.items.filter(i => i.status !== 'sold');
+  if (ST.stockFilter !== 'all') l = l.filter(i => i.status === ST.stockFilter);
+  if (ST.typeFilter !== 'all') l = l.filter(i => i.type === ST.typeFilter);
+  if (ST.q) { const q = ST.q.toLowerCase(); l = l.filter(i => (i.name + ' ' + (i.serial || '') + ' ' + (i.notes || '')).toLowerCase().includes(q)); }
+  const gain = i => num(i.price) > 0 ? (num(i.price) - totalCost(i)) / num(i.price) : -1;
+  const s = ST.sort;
+  l.sort((a, b) => s === 'old' ? (a.created || 0) - (b.created || 0) : s === 'price' ? num(b.price) - num(a.price) : s === 'margin' ? gain(b) - gain(a) : (b.created || 0) - (a.created || 0));
+  return l;
+}
+/* ============ Photos ============ */
+const okImg = u => typeof u === 'string' && /^https:\/\/[a-z0-9-]+\.supabase\.co\//.test(u);
+const photoUrls = i => (i.photos || []).map(x => x && x.u).filter(okImg);
+function tileFor(i, cls){
+  const u = photoUrls(i)[0];
+  return u ? `<span class="tile ${cls || ''} has-img" style="background-image:url('${esc(u)}')"></span>` : `<span class="tile ${cls || ''}">${ico(TYPE_ICO[i.type] || 'box', 20)}</span>`;
+}
+// Compresse en JPEG (max 1000 px, <= ~350 Ko) : renvoie du base64 sans prefixe
+async function compress(file){
+  if (!file || !/^image\//.test(file.type)) throw new Error('bad');
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = ko; im.src = url; });
+    let w = img.naturalWidth, h = img.naturalHeight; if (!w || !h) throw new Error('bad');
+    let sc = Math.min(1, 1000 / Math.max(w, h));
+    for (let k = 0; k < 4; k++) {
+      const c = document.createElement('canvas'); c.width = Math.round(w * sc); c.height = Math.round(h * sc);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+      for (const q of [0.8, 0.68, 0.55]) {
+        const d = c.toDataURL('image/jpeg', q), b = d.slice(d.indexOf(',') + 1);
+        if (b.length * 0.75 <= 350000) return { b64: b, preview: d };
+      }
+      sc *= 0.75;
+    }
+    throw new Error('big');
+  } finally { URL.revokeObjectURL(url); }
+}
+async function uploadPhotos(it, list){
+  let fail = 0;
+  for (const p of list) {
+    try { const r = await api('photo_upload', { itemId: it.id, data: p.b64 }); it.photos = r.photos || it.photos; }
+    catch(e) { fail++; }
+  }
+  if (fail) toast(t('photoFail'));
+  render();
+}
+function openLightbox(u){
+  if (!okImg(u)) return;
+  const d = document.createElement('div'); d.className = 'lb'; d.id = 'lb';
+  d.innerHTML = `<button class="xbtn" data-a="lbclose" aria-label="${esc(t('close'))}">${ico('x', 17)}</button><img alt="" src="${esc(u)}">`;
+  document.body.appendChild(d);
+}
+function rowItem(i){
+  const tc = totalCost(i), gain = num(i.price) - tc, mp = num(i.price) > 0 ? gain / num(i.price) * 100 : null, d = daysIn(i);
+  return `<button class="rw" data-a="open" data-id="${esc(i.id)}">
+    ${tileFor(i)}
+    <span class="rw-main"><span class="rw-t">${esc(i.name)}</span>
+      <span class="rw-s">${gradeBadge(i.condition)}${i.published && i.status !== 'sold' ? pill(t('pubOn'), 'ok') : ''}${i.status === 'reserved' ? pill(t('reserved'), 'warn') : ''}<span class="${d > 60 ? 'warnc' : ''}">${d} ${t('daysShort')}</span>${i.serial ? '<span>· …' + esc(String(i.serial).slice(-4)) + '</span>' : ''}</span></span>
+    <span class="rw-r"><b>${money(num(i.price))}</b>${mp !== null ? `<span class="${gain >= 0 ? 'okc' : 'badc'}">${gain >= 0 ? '+' : ''}${mp.toFixed(0)} %</span>` : ''}</span>
+  </button>`;
+}
+function stockList(){
+  const l = stockFiltered();
+  if (!l.length) return S.items.some(i => i.status !== 'sold') ? emptyState('search', t('noResult'), t('noResultHint')) : emptyState('box', t('noStock'), t('noStockHint'));
+  return `<section class="card list">${l.map(rowItem).join('')}</section>`;
+}
+function vStock(){
+  const all = S.items.filter(i => i.status !== 'sold');
+  const f = (k, label) => `<button class="chip ${ST.stockFilter === k ? 'on' : ''}" data-a="sf" data-id="${k}">${label}</button>`;
+  const tf = (k, label, ic) => `<button class="chip ${ST.typeFilter === k ? 'on' : ''}" data-a="tf" data-id="${k}">${ic ? ico(ic, 15) : ''}${label}</button>`;
+  return `
+  <div class="page-h"><div><h1>${t('tStock')}</h1><div class="sub">${plural(all.length, 'item')} · ${t('capital')} ${money(sum(all, totalCost))}</div></div></div>
+  <div class="search">${ico('search', 18)}<input class="in" id="q" type="search" placeholder="${esc(t('search'))}" value="${esc(ST.q)}" autocomplete="off"></div>
+  <div class="chips">${f('all', t('all'))}${f('stock', t('available'))}${f('reserved', t('reserved'))}</div>
+  <div class="chips">${tf('all', t('all'))}${TYPES.map(k => tf(k, t(k), TYPE_ICO[k])).join('')}</div>
+  <div class="toolbar"><span class="mutedc" style="font-size:13px"></span>
+    <select class="in" id="sort">${[['recent', 'sortRecent'], ['old', 'sortOld'], ['price', 'sortPrice'], ['margin', 'sortMargin']].map(([v, k]) => `<option value="${v}" ${ST.sort === v ? 'selected' : ''}>${t(k)}</option>`).join('')}</select></div>
+  <div id="list">${stockList()}</div>`;
+}
+
+/* ============ Ventes ============ */
+function rowSale(i, m){
+  const gain = num(i.soldPrice) - totalCost(i), has = !!m[i.id];
+  return `<button class="rw" data-a="sale" data-id="${esc(i.id)}">
+    ${tileFor(i, has ? 'okt' : '')}
+    <span class="rw-main"><span class="rw-t">${esc(i.name)}</span><span class="rw-s"><span>${esc(fmtDate(i.soldDate))}</span>${i.buyer ? '<span>· ' + esc(i.buyer) + '</span>' : ''}${has ? pill(t('invoiced'), 'ok') : pill(t('toInvoice'), 'warn')}</span></span>
+    <span class="rw-r"><b>${money(num(i.soldPrice))}</b><span class="${gain >= 0 ? 'okc' : 'badc'}">${gain >= 0 ? '+' : ''}${money(gain)}</span></span>
+  </button>`;
+}
+function vSales(){
+  const a = aggPeriod(ST.sales), m = invMap(), list = a.list.slice().sort((x, y) => (y.soldDate || '').localeCompare(x.soldDate || ''));
+  return `
+  <div class="page-h"><div><h1>${t('tSales')}</h1></div>${seg('sales', ST.sales, PERIODS())}</div>
+  <div class="grid3">
+    <div class="card stat"><span class="lbl">${t('nSales')}</span><div class="v">${a.n}</div></div>
+    <div class="card stat"><span class="lbl">${t('revenue')}</span><div class="v">${money(a.rev)}</div></div>
+    <div class="card stat"><span class="lbl">${t('netProfit')}</span><div class="v ${a.profit < 0 ? 'badc' : 'okc'}">${money(a.profit)}</div></div>
+  </div>
+  <div class="toolbar" style="margin-top:14px"><span></span><button class="btn sm" data-a="csvSales">${ico('download', 15)}${t('exportCsv')}</button></div>
+  ${list.length ? `<section class="card list">${list.map(i => rowSale(i, m)).join('')}</section>` : emptyState('trend', t('noSales'), t('noSalesHint'))}`;
+}
+
+/* ============ Factures ============ */
+function invFiltered(){
+  let l = S.invoices.slice();
+  if (ST.inv !== 'all') { const from = daysAgo(Number(ST.inv) - 1); l = l.filter(v => v.date >= from); }
+  if (ST.iq) { const q = ST.iq.toLowerCase(); l = l.filter(v => (invNo(v.number) + ' ' + v.number + ' ' + v.buyerName + ' ' + v.itemName + ' ' + (v.itemSerial || '')).toLowerCase().includes(q)); }
+  return l.sort((a, b) => b.number - a.number);
+}
+function rowInv(v){
+  return `<button class="rw" data-a="viewInv" data-id="${esc(v.id)}">
+    <span class="tile okt">${ico('receipt', 20)}</span>
+    <span class="rw-main"><span class="rw-t">${esc(v.buyerName)}</span><span class="rw-s"><span>${t('invNo')} ${invNo(v.number)}</span><span>· ${esc(fmtDate(v.date, v.lang))}</span><span>· ${esc(v.itemName)}</span></span></span>
+    <span class="rw-r"><b>${esc(fmtMoney(v.amount, v.currency, S.lang))}</b>${pill(t('pay_' + v.payment), '')}</span>
+  </button>`;
+}
+function invList(){
+  const l = invFiltered();
+  if (!l.length) return S.invoices.length ? emptyState('search', t('noResult'), t('noResultHint')) : emptyState('file', t('noInv'), t('noInvHint'));
+  return `<section class="card list">${l.map(rowInv).join('')}</section>`;
+}
+function vInv(){
+  const l = invFiltered(), m = invMap();
+  const cur = S.currency, same = l.filter(v => v.currency === cur), totalAmt = sum(same, v => v.amount);
+  const todo = S.items.filter(i => i.status === 'sold' && !m[i.id]).sort((a, b) => (b.soldDate || '').localeCompare(a.soldDate || ''));
+  const per = [['30', t('p30')], ['90', t('p90')], ['all', t('pAll')]];
+  return `
+  <div class="page-h"><div><h1>${t('tInv')}</h1></div>${seg('inv', ST.inv, per)}</div>
+  <div class="grid2">
+    <div class="card stat"><span class="lbl">${t('invCount')}</span><div class="v">${l.length}</div></div>
+    <div class="card stat"><span class="lbl">${t('invTotalAmt')}</span><div class="v">${money(totalAmt)}</div></div>
+  </div>
+  ${todo.length ? `<div class="sec-h"><h2>${t('toBill')} · ${todo.length}</h2></div><section class="card list">${todo.slice(0, 5).map(i => `
+    <div class="rw"><span class="tile sm warnt">${ico('clock', 17)}</span><span class="rw-main"><span class="rw-t">${esc(i.name)}</span><span class="rw-s"><span>${esc(fmtDate(i.soldDate))}</span>${i.buyer ? '<span>· ' + esc(i.buyer) + '</span>' : ''}</span></span><button class="btn pri sm" data-a="invoice" data-id="${esc(i.id)}">${t('createInvoice')}</button></div>`).join('')}</section>` : ''}
+  <div class="sec-h"><h2>${t('tInv')}</h2><button class="link" data-a="csvInv">${t('exportCsv')}</button></div>
+  <div class="search">${ico('search', 18)}<input class="in" id="iq" type="search" placeholder="${esc(t('invSearch'))}" value="${esc(ST.iq)}" autocomplete="off"></div>
+  <div id="ilist">${invList()}</div>`;
+}
+
+/* ============ Reglages ============ */
+function vSet(){
+  const name = [TU.first_name, TU.last_name].filter(Boolean).join(' ') || '—';
+  return `
+  <div class="page-h"><div><h1>${t('tSet')}</h1></div></div>
+  <div class="sec-h" style="margin-top:4px"><h2>${t('account')}</h2></div>
+  <section class="card pad" style="display:flex;gap:12px;align-items:center">
+    <span class="tile big">${ico('user', 24)}</span>
+    <span style="flex:1;min-width:0"><b style="display:block">${esc(name)}</b><span class="mutedc" style="font-size:12px">ID ${esc(TU.id || '—')}</span></span>
+    <span style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">${pill(t('adminRole'), 'pri')}${pill(ico('check', 12) + t('connected'), 'ok')}</span>
+  </section>
+
+  <div class="sec-h"><h2>${t('company')}</h2></div>
+  <section class="card pad">
+    <div class="fld"><label>${t('bizName')}</label><input class="in" id="b-name" maxlength="120" value="${esc(S.profile.businessName)}"></div>
+    <div class="fld"><label>${t('bizAddress')}</label><input class="in" id="b-addr" maxlength="200" value="${esc(S.profile.address)}"></div>
+    <div class="two"><div class="fld"><label>${t('bizPhone')}</label><input class="in" id="b-phone" maxlength="40" inputmode="tel" value="${esc(S.profile.phone)}"></div>
+    <div class="fld"><label>${t('bizTax')}</label><input class="in" id="b-tax" maxlength="40" value="${esc(S.profile.taxId)}"></div></div>
+    <div class="fld"><label>${t('bizFooter')}</label><input class="in" id="b-foot" maxlength="300" value="${esc(S.profile.footer)}" placeholder="${esc(t('invFooterDefault'))}"></div>
+    <button class="btn pri block" data-a="saveBiz">${t('save')}</button>
+  </section>
+
+  <div class="sec-h"><h2>${t('prefs')}</h2></div>
+  <section class="card pad">
+    <div class="fld"><label>${t('language')}</label><div class="seg"><button class="${S.lang === 'fr' ? 'on' : ''}" data-a="lang" data-id="fr">Français</button><button class="${S.lang === 'pt' ? 'on' : ''}" data-a="lang" data-id="pt">Português</button></div></div>
+    <div class="fld" style="margin-bottom:0"><label>${t('currency')}</label><select class="in" id="cur">${CURRENCIES.map(c => `<option ${c === S.currency ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+  </section>
+
+  <div class="sec-h"><h2>${t('data')}</h2></div>
+  <section class="card pad stack">
+    <button class="btn block" data-a="csvStock">${ico('download', 17)}${t('exportStock')}</button>
+    <button class="btn block" data-a="csvSales">${ico('download', 17)}${t('exportCsv')} · ${t('nSales')}</button>
+    <button class="btn block" data-a="exportJson">${ico('copy', 17)}${t('exportJson')}</button>
+  </section>
+
+  <div class="sec-h"><h2>${t('security')}</h2></div>
+  <section class="card pad"><h3 style="margin:0 0 6px;font-size:15px">${t('vitrine')}</h3><p class="mutedc" style="font-size:13px;margin:0 0 10px">${t('vitrineText')}</p><button class="btn full" data-a="copyVitrine">${ico('link', 17)}${t('copyLink')}</button><p class="hint" style="margin-top:8px">${t('vitrineWarn')}</p></section>
+  <section class="card pad" style="display:flex;gap:12px"><span class="tile okt">${ico('shield', 20)}</span><span style="font-size:13px;color:var(--text2)">${t('secText')}</span></section>
+  <p class="mutedc" style="text-align:center;font-size:12px;margin:18px 0 0">${t('app')} · ${t('version')} 2.1</p>`;
+}
+
+/* ============ Feuilles (modales) ============ */
+function sheet(html){
+  $('modal').innerHTML = `<div class="backdrop" data-a="backdrop"><div class="sheet" role="dialog" aria-modal="true"><div class="sh-bar"><div class="grab"></div><button class="xbtn" data-a="close" aria-label="${esc(t('close'))}">${ico('x', 17)}</button></div>${html}</div></div>`;
+  document.body.style.overflow = 'hidden';
+  try { tg.BackButton.show(); } catch(e){}
+}
+function closeModal(){
+  $('modal').innerHTML = ''; $('modal').oninput = null; document.body.style.overflow = '';
+  try { tg.BackButton.hide(); } catch(e){}
+}
+try { tg.BackButton.onClick(closeModal); } catch(e){}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+const kv = (l, v) => `<div><small>${l}</small><b>${v}</b></div>`;
+const inMoney = (id, v, ph) => `<div class="inwrap"><input class="in" id="${id}" inputmode="decimal" value="${esc(v || '')}" placeholder="${esc(ph || '0')}"><span class="cur">${esc(S.currency)}</span></div>`;
+
+function openItem(id){
+  const i = S.items.find(x => x.id === id); if (!i) return;
+  const tc = totalCost(i), gain = num(i.price) - tc, mp = num(i.price) > 0 ? gain / num(i.price) * 100 : 0;
+  sheet(`
+  ${photoUrls(i).length ? `<div class="ph-strip">${photoUrls(i).map(u => `<button type="button" data-a="lb" data-u="${esc(u)}" style="background-image:url('${esc(u)}')" aria-label="photo"></button>`).join('')}</div>` : ''}
+  <div class="sh-head"><span class="tile big">${ico(TYPE_ICO[i.type] || 'box', 24)}</span><div><h3>${esc(i.name)}</h3><div class="rw-s">${gradeBadge(i.condition)}<span>${esc(gradeLabel(i.condition))}</span>${i.status === 'reserved' ? pill(t('reserved'), 'warn') : pill(t('available'), 'ok')}</div></div></div>
+  <div class="kv">
+    ${kv(t('fCost'), money(num(i.cost)))}${kv(t('fRepair'), money(num(i.repair)))}
+    ${kv(t('totalCost'), money(tc))}${kv(t('fPrice'), money(num(i.price)))}
+    ${kv(t('margin'), `<span class="${gain >= 0 ? 'okc' : 'badc'}">${gain >= 0 ? '+' : ''}${money(gain)} (${mp.toFixed(0)} %)</span>`)}${kv(t('inStockFor'), daysIn(i) + ' ' + t('daysShort'))}
+    ${i.serial ? `<div style="grid-column:1/-1"><small>${t('fSerial')}</small><b>${esc(i.serial)}</b></div>` : ''}
+  </div>
+  ${i.notes ? `<div class="note">${esc(i.notes)}</div>` : ''}
+  <div class="btns">
+    <button class="btn pri full" data-a="sell" data-id="${esc(i.id)}">${ico('trend', 18)}${t('sell')}</button>
+    <button class="btn" data-a="reserve" data-id="${esc(i.id)}">${ico('bookmark', 17)}${i.status === 'reserved' ? t('unreserve') : t('reserve')}</button>
+    <button class="btn" data-a="share" data-id="${esc(i.id)}">${ico('copy', 17)}${t('adCopy')}</button>
+    <button class="btn" data-a="edit" data-id="${esc(i.id)}">${ico('edit', 17)}${t('edit')}</button>
+    <button class="btn danger" data-a="del" data-id="${esc(i.id)}">${ico('trash', 17)}${t('del')}</button>
+  </div>`);
+}
+
+function openForm(id){
+  const i = id ? S.items.find(x => x.id === id) : { type:'phone', condition:'B', status:'stock' };
+  sheet(`
+  <div class="sh-title">${id ? t('editItem') : t('addItem')}</div>
+  <div class="fld"><label>${t('fType')}</label><select class="in" id="f-type">${TYPES.map(k => `<option value="${k}" ${k === i.type ? 'selected' : ''}>${t(k)}</option>`).join('')}</select></div>
+  <div class="fld"><label>${t('fName')}</label><input class="in" id="f-name" maxlength="120" value="${esc(i.name || '')}" placeholder="${esc(t('fNamePh'))}"></div>
+  <div class="fld"><label>${t('fCond')}</label><input type="hidden" id="f-cond" value="${esc(i.condition || 'B')}"><div class="gbtns">${['A','B','C','D'].map(g => `<button type="button" class="gbtn ${g === (i.condition || 'B') ? 'on' : ''}" data-a="grade" data-id="${g}">${g}</button>`).join('')}</div><div class="hint" id="g-hint">${esc(gradeLabel(i.condition || 'B'))}</div></div>
+  <div class="fld"><label>${t('fSerial')}</label><input class="in" id="f-serial" maxlength="60" value="${esc(i.serial || '')}"></div>
+  <div class="two"><div class="fld"><label>${t('fCost')}</label>${inMoney('f-cost', i.cost)}</div><div class="fld"><label>${t('fRepair')}</label>${inMoney('f-repair', i.repair)}</div></div>
+  <div class="fld"><label>${t('fPrice')}</label>${inMoney('f-price', i.price)}</div>
+  <div class="est"><span>${t('est')}</span><b id="f-est">—</b></div>
+  <div class="fld"><label>${t('fNotes')}</label><textarea class="in" id="f-notes" rows="2" maxlength="500">${esc(i.notes || '')}</textarea></div>
+  <div class="fld"><label>${t('photos')}</label><div class="ph-grid" id="ph-grid"></div><input type="file" id="ph-file" accept="image/*" multiple hidden><div class="hint">${t('photoMax')}</div></div>
+  <label class="sw"><span><b>${t('pub')}</b><small>${t('pubHint')}</small></span><input type="checkbox" id="f-pub" ${i.published ? 'checked' : ''}></label>
+  <div class="btns"><button class="btn" data-a="close">${t('cancel')}</button><button class="btn pri" id="f-save">${t('save')}</button></div>`);
+  const upd = () => {
+    const c = num($('f-cost').value) + num($('f-repair').value), p = num($('f-price').value), g = p - c;
+    $('f-est').innerHTML = p > 0 ? `<span class="${g >= 0 ? 'okc' : 'badc'}">${g >= 0 ? '+' : ''}${money(g)} · ${(g / p * 100).toFixed(0)} %</span>` : '—';
+  };
+  $('modal').oninput = upd; upd();
+  const pend = [];                       // nouvelles photos (pas encore envoyees)
+  const have = () => (id ? (S.items.find(x => x.id === id) || {}).photos || [] : []);
+  const drawPh = () => {
+    const ex = have().filter(x => okImg(x.u)), cells = ex.map(x => `<div class="ph-cell" style="background-image:url('${esc(x.u)}')"><button type="button" class="rm" data-rm="e" data-p="${esc(x.p)}" aria-label="x">${ico('x', 13)}</button></div>`)
+      .concat(pend.map((x, n) => `<div class="ph-cell" style="background-image:url('${x.preview}')"><button type="button" class="rm" data-rm="n" data-n="${n}" aria-label="x">${ico('x', 13)}</button></div>`));
+    if (cells.length < 4) cells.push(`<button type="button" class="ph-add" id="ph-add"><span>${ico('camera', 22)}${t('addPhoto')}</span></button>`);
+    $('ph-grid').innerHTML = cells.join('');
+  };
+  drawPh();
+  $('ph-grid').onclick = e => {
+    if (e.target.closest('#ph-add')) { $('ph-file').click(); return; }
+    const rm = e.target.closest('.rm'); if (!rm) return;
+    if (rm.dataset.rm === 'n') { pend.splice(Number(rm.dataset.n), 1); drawPh(); return; }
+    const path = rm.dataset.p;
+    ask(t('photoDel'), async () => {
+      try { const r = await api('photo_delete', { itemId: id, path }); const it0 = S.items.find(x => x.id === id); if (it0) it0.photos = r.photos || []; drawPh(); }
+      catch(err) { toast(t('errNet')); }
+    });
+  };
+  $('ph-file').onchange = async e => {
+    const files = Array.from(e.target.files || []); e.target.value = '';
+    for (const f of files) {
+      if (have().length + pend.length >= 4) break;
+      try { pend.push(await compress(f)); } catch(err) { toast(t('photoErr')); }
+    }
+    drawPh();
+  };
+  $('f-save').onclick = async () => {
+    const name = $('f-name').value.trim(), cost = $('f-cost').value;
+    if (!name || cost === '') { toast(t('required')); return; }
+    const data = { type: $('f-type').value, name, condition: $('f-cond').value, serial: $('f-serial').value.trim(),
+      cost: num(cost), repair: num($('f-repair').value), price: num($('f-price').value), notes: $('f-notes').value.trim(), published: $('f-pub').checked };
+    let it;
+    if (id) { it = S.items.find(x => x.id === id); Object.assign(it, data); }
+    else { it = Object.assign({ id: crypto.randomUUID(), status: 'stock', created: Date.now(), photos: [] }, data); S.items.push(it); }
+    const up = pend.slice();
+    closeModal(); toast(t(up.length ? 'photoUp' : 'saved')); haptic(); render();
+    if (up.length) {
+      try { await api('upsert', { item: it }); await uploadPhotos(it, up); toast(t('saved')); }
+      catch(err) { toast(t('errNet')); await refresh(); }
+    } else sync('upsert', { item: it });
+  };
+}
+
+function openSell(id){
+  const i = S.items.find(x => x.id === id); if (!i) return;
+  sheet(`
+  <div class="sh-title">${t('sellTitle')}</div>
+  <div class="sh-head"><span class="tile">${ico(TYPE_ICO[i.type] || 'box', 20)}</span><div><b>${esc(i.name)}</b><div class="rw-s">${t('totalCost')} ${money(totalCost(i))}</div></div></div>
+  <div class="fld"><label>${t('soldPrice')}</label>${inMoney('s-price', i.price)}</div>
+  <div class="est"><span>${t('saleProfit')}</span><b id="s-est">—</b></div>
+  <div class="fld"><label>${t('buyer')}</label><input class="in" id="s-buyer" maxlength="120"></div>
+  <div class="fld"><label>${t('date')}</label><input class="in" id="s-date" type="date" value="${today()}"></div>
+  <div class="btns"><button class="btn" data-a="close">${t('cancel')}</button><button class="btn pri" id="s-ok">${t('confirmSell')}</button></div>`);
+  const upd = () => { const g = num($('s-price').value) - totalCost(i); $('s-est').innerHTML = `<span class="${g >= 0 ? 'okc' : 'badc'}">${g >= 0 ? '+' : ''}${money(g)}</span>`; };
+  $('modal').oninput = upd; upd();
+  $('s-ok').onclick = () => {
+    i.status = 'sold'; i.soldPrice = num($('s-price').value);
+    i.buyer = $('s-buyer').value.trim(); i.soldDate = $('s-date').value || today();
+    const sid = i.id;
+    sync('upsert', { item: i }).then(() => { if (S.items.some(x => x.id === sid && x.status === 'sold')) ask(t('askInvoice'), () => openInvoiceForm(sid)); });
+    closeModal(); toast(t('saved')); haptic(); render();
+  };
+}
+
+function openSale(id){
+  const i = S.items.find(x => x.id === id); if (!i) return;
+  const gain = num(i.soldPrice) - totalCost(i), v = invMap()[id];
+  sheet(`
+  <div class="sh-head"><span class="tile big ${v ? 'okt' : ''}">${ico(TYPE_ICO[i.type] || 'box', 24)}</span><div><h3>${esc(i.name)}</h3><div class="rw-s">${v ? pill(t('invoiced'), 'ok') : pill(t('toInvoice'), 'warn')}<span>${t('soldOn')} ${esc(fmtDate(i.soldDate))}</span></div></div></div>
+  <div class="kv">
+    ${kv(t('soldPrice'), money(num(i.soldPrice)))}${kv(t('totalCost'), money(totalCost(i)))}
+    ${kv(t('margin'), `<span class="${gain >= 0 ? 'okc' : 'badc'}">${gain >= 0 ? '+' : ''}${money(gain)}</span>`)}${kv(t('buyerLbl'), esc(i.buyer || '—'))}
+    ${i.serial ? `<div style="grid-column:1/-1"><small>${t('fSerial')}</small><b>${esc(i.serial)}</b></div>` : ''}
+  </div>
+  <div class="btns">
+    <button class="btn pri full" data-a="invoice" data-id="${esc(i.id)}">${ico('receipt', 18)}${v ? t('viewInvoice') : t('createInvoice')}</button>
+    <button class="btn" data-a="unsell" data-id="${esc(i.id)}">${ico('undo', 17)}${t('cancelSale')}</button>
+    <button class="btn danger" data-a="del" data-id="${esc(i.id)}">${ico('trash', 17)}${t('del')}</button>
+  </div>`);
+}
+
+/* ============ Factures : formulaire, apercu, texte ============ */
+const invLabels = v => k => (I18N[v.lang] && I18N[v.lang][k]) || k;
+const invDateStr = v => fmtDate(v.date, v.lang);
+
+function invoiceHTML(v){
+  const L = invLabels(v), s = v.seller || {};
+  const lines = [
+    `<b>${esc(v.itemName)}</b>`,
+    v.itemCondition ? L('invGrade') + ': ' + esc(L('g' + v.itemCondition)) : '',
+    v.itemSerial ? L('invSerial') + ': ' + esc(v.itemSerial) : '',
+    v.warrantyDays > 0 ? L('invWarranty') + ': ' + esc(v.warrantyDays) + ' ' + L('days') : ''
+  ].filter(Boolean);
+  const tot = fmtMoney(v.amount, v.currency, v.lang);
+  return `<div class="inv" id="inv">
+    <div class="top">
+      <div><div class="brand-n">${esc(s.businessName)}</div><div class="sm">${[s.address, s.phone, s.taxId ? L('bizTax') + ': ' + s.taxId : ''].filter(Boolean).map(esc).join('<br>')}</div></div>
+      <div style="text-align:right"><span class="tag">${L('invoice')}</span><div class="no">${L('invNo')} ${invNo(v.number)}</div><div class="sm">${esc(invDateStr(v))}</div></div>
+    </div>
+    <div class="meta">
+      <div><small>${L('invBuyer')}</small><b>${esc(v.buyerName)}</b>${v.buyerPhone ? '<br>' + esc(v.buyerPhone) : ''}${v.buyerDoc ? '<br>' + esc(v.buyerDoc) : ''}</div>
+      <div><small>${L('invPaid')}</small><b>${L('pay_' + v.payment)}</b><br><span class="stamp">${L('paid')}</span></div>
+    </div>
+    <table><tr><th>${L('invDesc')}</th><th class="r">${L('invQty')}</th><th class="r">${L('invTotal')}</th></tr>
+    <tr><td>${lines.join('<br>')}</td><td class="r">1</td><td class="r">${esc(tot)}</td></tr></table>
+    <div class="totals"><div class="tl"><span>${L('invTotal')}</span><span>${esc(tot)}</span></div></div>
+    ${v.notes ? `<div style="margin-top:12px">${esc(v.notes)}</div>` : ''}
+    <div class="ft">${esc(s.footer || L('invFooterDefault'))}</div>
+  </div>`;
+}
+function invoiceText(v){
+  const L = invLabels(v), s = v.seller || {};
+  const out = [
+    s.businessName, s.address, s.phone, s.taxId ? L('bizTax') + ': ' + s.taxId : '', '',
+    L('invoice') + ' ' + L('invNo') + ' ' + invNo(v.number) + ' · ' + invDateStr(v),
+    L('invBuyer') + ': ' + v.buyerName + (v.buyerPhone ? ' / ' + v.buyerPhone : ''), '',
+    v.itemName + (v.itemCondition ? ' (' + L('g' + v.itemCondition) + ')' : ''),
+    v.itemSerial ? L('invSerial') + ': ' + v.itemSerial : '',
+    L('invTotal') + ': ' + fmtMoney(v.amount, v.currency, v.lang),
+    L('invPaid') + ': ' + L('pay_' + v.payment),
+    v.warrantyDays > 0 ? L('invWarranty') + ': ' + v.warrantyDays + ' ' + L('days') : '',
+    v.notes || '', '', s.footer || L('invFooterDefault')
+  ];
+  return out.filter((x, idx) => x !== '' || (idx > 0 && out[idx - 1] !== '')).join('\n');
+}
+
+function openInvoice(v){
+  sheet(`${invoiceHTML(v)}
+    <p class="hint" style="margin:10px 2px 0">${t('printHint')}</p>
+    <div class="btns"><button class="btn pri" data-a="print">${ico('printer', 17)}${t('print')}</button><button class="btn" id="v-copy">${ico('copy', 17)}${t('copyInv')}</button><button class="btn full" data-a="close">${t('close')}</button></div>`);
+  $('v-copy').onclick = () => copy(invoiceText(v), t('invCopied'));
+  window.__inv = v;
+}
+
+function openInvoiceForm(id){
+  const i = S.items.find(x => x.id === id); if (!i) return;
+  const ex = invMap()[id]; if (ex) { openInvoice(ex); return; }
+  if (!S.profile.businessName) { closeModal(); toast(t('needBiz')); ST.view = 'set'; render(); window.scrollTo(0, 0); return; }
+  sheet(`
+  <div class="sh-title">${t('invFormTitle')}</div>
+  <div class="sh-head"><span class="tile">${ico('receipt', 20)}</span><div><b>${esc(i.name)}</b><div class="rw-s">${money(num(i.soldPrice))}</div></div></div>
+  <div class="fld"><label>${t('buyerName')}</label><input class="in" id="v-name" maxlength="120" value="${esc(i.buyer || '')}"></div>
+  <div class="two"><div class="fld"><label>${t('buyerPhone')}</label><input class="in" id="v-phone" maxlength="40" inputmode="tel"></div><div class="fld"><label>${t('buyerDoc')}</label><input class="in" id="v-doc" maxlength="40"></div></div>
+  <div class="two"><div class="fld"><label>${t('payment')}</label><select class="in" id="v-pay">${PAYS.map(p => `<option value="${p}">${t('pay_' + p)}</option>`).join('')}</select></div>
+  <div class="fld"><label>${t('warranty')}</label><input class="in" id="v-war" inputmode="numeric" value="30"></div></div>
+  <div class="fld"><label>${t('invNote')}</label><input class="in" id="v-notes" maxlength="300"></div>
+  <div class="btns"><button class="btn" data-a="close">${t('cancel')}</button><button class="btn pri" id="v-ok">${t('createInvoice')}</button></div>`);
+  const ok = $('v-ok');
+  ok.onclick = () => {
+    const g = k => $(k).value.trim();
+    if (!g('v-name')) { $('v-name').focus(); return; }
+    const label = ok.textContent; ok.disabled = true; ok.textContent = t('creating');
+    api('invoice_create', { invoice: {
+      itemId: id, buyerName: g('v-name'), buyerPhone: g('v-phone'), buyerDoc: g('v-doc'), payment: $('v-pay').value,
+      warrantyDays: Math.max(0, Math.min(365, parseInt(g('v-war'), 10) || 0)), notes: g('v-notes'),
+      lang: S.lang, currency: S.currency, issuedDate: i.soldDate
+    } }).then(r => {
+      if (!S.invoices.some(v => v.id === r.invoice.id)) S.invoices.unshift(r.invoice);
+      render(); openInvoice(r.invoice); haptic();
+    }).catch(e => {
+      ok.disabled = false; ok.textContent = label;
+      toast(e.message === 'bad_profile' ? t('needBiz') : t('errNet'));
+    });
+  };
+}
+
+/* ============ Exports CSV (copie dans le presse-papiers) ============ */
+const csvStr = v => { let s = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+const csvNum = n => Number(n || 0).toFixed(2).replace('.', ',');
+const csv = rows => rows.map(r => r.map(c => typeof c === 'number' ? csvNum(c) : csvStr(c)).join(';')).join('\n');
+
+/* ============ Annonce ============ */
+function shareText(i){
+  return [ t('adTitle'), t(i.type) + ' · ' + i.name, t('adState') + ': ' + t('g' + (i.condition || 'B')), i.serial ? t('adSerial') + ': ' + i.serial : '',
+    i.notes || '', '💰 ' + t('adPrice') + ': ' + money(num(i.price)), t('adContact') ].filter(Boolean).join('\n');
+}
+
+/* ============ Actions ============ */
+function act(a, id, el){
+  const i = id ? S.items.find(x => x.id === id) : null;
+  switch (a) {
+    case 'backdrop': case 'close': closeModal(); break;
+    case 'nav': ST.view = id; render(); window.scrollTo(0, 0); break;
+    case 'lang': S.lang = id; save(); render(); break;
+    case 'per': ST[el.dataset.scope] = id; render(); break;
+    case 'sf': ST.stockFilter = id; render(); break;
+    case 'tf': ST.typeFilter = id; render(); break;
+    case 'add': openForm(); break;
+    case 'open': openItem(id); break;
+    case 'sale': openSale(id); break;
+    case 'edit': openForm(id); break;
+    case 'sell': openSell(id); break;
+    case 'share': if (i) { copy(shareText(i), t('adCopied')); } break;
+    case 'grade': $('f-cond').value = id; document.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.dataset.id === id)); $('g-hint').textContent = gradeLabel(id); break;
+    case 'reserve': if (i) { i.status = i.status === 'reserved' ? 'stock' : 'reserved'; sync('upsert', { item: i }); closeModal(); render(); } break;
+    case 'del':
+      if (!i) break;
+      if (invMap()[id]) { toast(t('delBlocked')); break; }
+      ask(t('delAsk'), () => { S.items = S.items.filter(x => x.id !== id); sync('delete', { id }); closeModal(); render(); });
+      break;
+    case 'unsell':
+      if (!i) break;
+      if (invMap()[id]) { toast(t('hasInvoice')); break; }
+      ask(t('cancelSaleAsk'), () => { i.status = 'stock'; delete i.soldPrice; delete i.soldDate; delete i.buyer; sync('upsert', { item: i }); closeModal(); render(); });
+      break;
+    case 'invoice': openInvoiceForm(id); break;
+    case 'viewInv': { const v = S.invoices.find(x => x.id === id); if (v) openInvoice(v); break; }
+    case 'print': try { window.print(); } catch(e) { toast(t('printHint')); } break;
+    case 'saveBiz': {
+      const g = k => $(k).value.trim();
+      S.profile = { businessName: g('b-name'), address: g('b-addr'), phone: g('b-phone'), taxId: g('b-tax'), footer: g('b-foot'), currency: S.currency };
+      sync('profile_save', { profile: S.profile }).then(() => { toast(t('bizSaved')); render(); });
+      break;
+    }
+    case 'exportJson': copy(JSON.stringify({ items: S.items, invoices: S.invoices, profile: S.profile }), t('backupCopied')); break;
+    case 'csvStock':
+      copy(csv([[t('fName'), t('fType'), t('fCond'), t('fSerial'), t('status'), t('fCost'), t('fRepair'), t('fPrice'), t('date')]].concat(
+        S.items.filter(x => x.status !== 'sold').map(x => [x.name, t(x.type), x.condition, x.serial || '', t(x.status === 'reserved' ? 'reserved' : 'available'), num(x.cost), num(x.repair), num(x.price), x.created ? ymd(new Date(x.created)) : '']))), t('csvCopied'));
+      break;
+    case 'csvSales': {
+      const m = invMap();
+      copy(csv([[t('date'), t('fName'), t('fSerial'), t('buyerLbl'), t('soldPrice'), t('totalCost'), t('margin'), t('invNo')]].concat(
+        aggPeriod(ST.sales).list.map(x => [x.soldDate, x.name, x.serial || '', x.buyer || '', num(x.soldPrice), totalCost(x), num(x.soldPrice) - totalCost(x), m[x.id] ? invNo(m[x.id].number) : ''])), ), t('csvCopied'));
+      break;
+    }
+    case 'csvInv':
+      copy(csv([[t('invNo'), t('date'), t('buyerLbl'), t('buyerPhone'), t('fName'), t('fSerial'), t('invTotal'), t('currency'), t('payment'), t('invWarranty')]].concat(
+        invFiltered().map(v => [invNo(v.number), v.date, v.buyerName, v.buyerPhone || '', v.itemName, v.itemSerial || '', Number(v.amount), v.currency, t('pay_' + v.payment), v.warrantyDays]))), t('csvCopied'));
+      break;
+    case 'lb': openLightbox(el.dataset.u); break;
+    case 'lbclose': { const d = $('lb'); if (d) d.remove(); break; }
+    case 'copyVitrine': copy(new URL('vitrine.html', location.href).href, t('linkCopied')); break;
+    case 'retry': ST.loading = true; render(); refresh(); break;
+  }
+}
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  if (el.dataset.a === 'backdrop' && e.target !== el) return;
+  act(el.dataset.a, el.dataset.id, el);
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') { ST.q = e.target.value; $('list').innerHTML = stockList(); }
+  if (e.target.id === 'iq') { ST.iq = e.target.value; $('ilist').innerHTML = invList(); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'cur') { S.currency = e.target.value; save(); render(); sync('profile_save', { profile: Object.assign({}, S.profile, { currency: S.currency }) }); }
+  if (e.target.id === 'sort') { ST.sort = e.target.value; $('list').innerHTML = stockList(); }
+});
+
+render();
+refresh();
+</script>
+</body>
+</html>
