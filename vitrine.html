@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <title>Vitrine</title>
+<link rel="icon" href="logo.png">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src https://*.supabase.co; img-src 'self' data: https://*.supabase.co; base-uri 'none'; form-action 'none'">
 <script src="config.js"></script>
 <style>
@@ -18,7 +19,8 @@ h1,h2,p{margin:0}
 .top{position:sticky;top:0;z-index:20;background:var(--bar);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--border)}
 .top .wrap{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
-.mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),#7c9bff);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.mark{position:relative;overflow:hidden;width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),#7c9bff);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .brand b{display:block;font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw}
 .seg{display:inline-flex;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px;gap:2px;flex:none}
@@ -80,7 +82,7 @@ h1,h2,p{margin:0}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="mark" id="mark">R</div><div><b id="shop">&nbsp;</b><span id="addr"></span></div></div>
+  <div class="brand"><div class="mark"><span id="mk">R</span><img src="logo.png" alt="" onerror="this.remove()"></div><div><b id="shop">&nbsp;</b><span id="addr"></span></div></div>
   <div class="seg" id="seg"><button data-l="fr">FR</button><button data-l="pt">PT</button></div>
 </div></header>
 <main class="wrap">
@@ -144,7 +146,7 @@ function render(){
   document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.l === L));
   const name = (ST.shop && ST.shop.name) || '';
   $('shop').textContent = name || '…';
-  $('mark').textContent = (name || 'R').charAt(0).toUpperCase();
+  $('mk').textContent = (name || 'R').charAt(0).toUpperCase();
   $('addr').textContent = (ST.shop && ST.shop.address) || '';
   document.title = name ? name + ' · ' + t('h1') : t('h1');
   $('h1').textContent = t('h1'); $('sub').textContent = t('sub');
